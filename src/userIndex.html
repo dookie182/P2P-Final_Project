@@ -10,43 +10,38 @@
     <title>TRY!</title>
 </head>
 <body>
-    <div class="container" style="background-color:#f5f5f5" >
-        <div class="row" style="background-color: #f5f5f5">
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">TRY - Lottery</span>
+        <span class="navbar-text" id="accountId">
+            Account: 
+        </span>
+    </nav>
+    <div class="container " style="background-color:#f5f5f5" >
+        <div class="row" style="background-color: #f5f5f5;">
             <div class="col-lg-2">
-                <h1 class="text-center">Operations</h1>
-                <br><br>
-                <div class="btn-group-vertical">
-                    <button class="btn btn-primary" onclick="App.startLottery()">Start Lottery</button>
-                    <button class="btn btn-primary" onclick="App.startRound()">Start Round</button>
-                    <button class="btn btn-primary" onclick="App.closeRound()">Close Round</button>
-                    <button class="btn btn-primary" onclick="App.closeLottery()">Close Lottery</button>
-                </div>
-   
-            </div>        
+                
+            </div>     
             <div id="mainUI" class="col-lg-9">
-                <h1 class="text-center">Try Lottery</h1>
-                <h3 class="text-center" id="accountId">Your address: </h3>
+                <h1 class="text-center">User Interface</h1>
                 <div class="card text-center">
                     <div class="card-body">
                       <h5 class="card-title">Choose your Numbers!</h5>
                       <p class="card-text">Here you can insert five numbers between</p>
+                      
                       <div class="input-group mb-3">
-                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberOne" aria-describedby="inputGroup-sizing-default" placeholder="Number 1">
-                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberTwo" aria-describedby="inputGroup-sizing-default" placeholder="Number 2">
-                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberThree" aria-describedby="inputGroup-sizing-default" placeholder="Number 3">
-                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberFour" aria-describedby="inputGroup-sizing-default" placeholder="Number 4">
-                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberFive" aria-describedby="inputGroup-sizing-default" placeholder="Number 5">
+                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberOne" aria-describedby="inputGroup-sizing-default" placeholder="Number 1" value="">
+                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberTwo" aria-describedby="inputGroup-sizing-default" placeholder="Number 2" value="">
+                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberThree" aria-describedby="inputGroup-sizing-default" placeholder="Number 3" value="">
+                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberFour" aria-describedby="inputGroup-sizing-default" placeholder="Number 4" value="">
+                        <input name="numbers" type="text" class="form-control" aria-label="InputNumberFive" aria-describedby="inputGroup-sizing-default" placeholder="Number 5" value="">
                         
-                        <input id="powerball" name="numbers" type="text" class="form-control" aria-label="InputNumberSix" aria-describedby="inputGroup-sizing-default" placeholder="PowerBall">
+                        <input id="powerball" name="numbers" type="text" class="form-control" aria-label="InputNumberSix" aria-describedby="inputGroup-sizing-default" placeholder="PowerBall" value="">
                     </div>
                     <button class="btn btn-primary" onclick="App.buyTicket()">Buy Ticket</button>
-
                     </div>
                 </div>
-
                 <br>
                 <br>
-            
                 <div id="eventId"></div>
                   </div>
             </div>

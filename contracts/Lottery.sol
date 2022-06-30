@@ -12,7 +12,7 @@ contract Lottery{
     }
 
     uint private constant TICKET_PRICE = 1 ether; 
-    address payable private lotteryOperator; //Address of the lottery operator
+    address payable public lotteryOperator; //Address of the lottery operator
     
     uint private ticketingCloses;
 
@@ -39,23 +39,28 @@ contract Lottery{
     event awardPlayer(address player, uint256 prize);
     event numbersDrawn();
     event lotteryClosed();
+    event lotteryStart();
+   
+
 
     
-    constructor (uint duration){
+    constructor (){}
+
+    //Function to create a new Lottery
+    function startLottery (uint duration) public {
         lotteryOperator = payable(msg.sender);
         item = new LotteryMint();
         ticketingCloses = block.number + duration;
         lotteryDuration = duration;
-        
         for(uint i = 1; i < 9; i++){
             mint(i);
         }
-        
+        emit lotteryStart();
     }
     
     //Function to buy a new Ticket and to choose numbers to play
     function buy (uint [] memory numbers) public payable { 
-        require(block.number < ticketingCloses, "Lottery round already closed, wait for a new round please!");
+        require(block.number <= ticketingCloses, "Lottery round already closed, wait for a new round please!");
         require(msg.value == TICKET_PRICE, "Not enough money, Ticket Price --> 1 Ether"); 
         require(numbers.length == 6, "Please choose exactly six different numbers!");
         Ticket memory newTicket;
@@ -181,7 +186,7 @@ contract Lottery{
     //Function used draw numbers and give prizes. Only the lottery operator can call this function.
     function closeRound () public{
         require(msg.sender == lotteryOperator, "You are not the lottery operator, permission denied!");
-        require(block.number > ticketingCloses, "Round still open, please wait lottery round ends!"); 
+        require(block.number >= ticketingCloses, "Round still open, please wait lottery round ends!"); 
         drawNumbers();
         givePrizes();
         withdraw();
