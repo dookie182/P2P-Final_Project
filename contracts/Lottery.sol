@@ -14,7 +14,7 @@ contract Lottery{
     uint private constant TICKET_PRICE = 1 ether; 
     address payable public lotteryOperator; //Address of the lottery operator
     
-    uint private ticketingCloses;
+    uint public ticketingCloses;
 
     //Declaration of LotteryMint contract
     LotteryMint item;
