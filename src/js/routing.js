@@ -1,5 +1,17 @@
 routing = {
 
+    getUserIndex: function(){
+        if(sessionStorage.getItem("currentUser") != sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/userIndex.html"){
+            window.location.replace("http://localhost:3000/userIndex.html");
+        }
+    },
+
+    getManagerIndex: function(){
+        if(sessionStorage.getItem("currentUser") == sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/managerIndex.html" || sessionStorage.getItem("currentUser") == null && window.location.href != "http://localhost:3000/managerIndex.html"){
+            window.location.replace("http://localhost:3000/managerIndex.html");
+        }
+    },
+
     redirect: function(){
         if(sessionStorage.getItem("currentUser") == sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/managerIndex.html" || sessionStorage.getItem("currentUser") == null && window.location.href != "http://localhost:3000/managerIndex.html"){
             window.location.replace("http://localhost:3000/managerIndex.html");

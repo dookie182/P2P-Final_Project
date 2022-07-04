@@ -80,14 +80,20 @@ App = {
                 });
                 instance.ticketBuy().on('data', function (event) {
                     //$("#eventId").html("Event catched: Ticket Buy");
-
-                    div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Ticket Buy Event
+                    setTimeout(function(){div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    NFT Minted
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                   </div>`;
-                  $(".alert").first().hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                  $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                }, 5000);
+                    /*div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Ticket Buy Event
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>`;*/
 
                     console.log("Event catched: Ticket Buy");
                     console.log(event);
@@ -145,6 +151,25 @@ App = {
                     console.log(event);
                     // If event has parameters: event.returnValues.valueName
                 });
+                instance.awardPlayer().on('data', function (event) {
+                    //$("#eventId").html("");
+                    setTimeout(function(){div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    NFT Minted
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>`; }, 5000);
+                  /*  div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    NFT Minted
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>`;*/
+                  $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                    console.log("Event catched: New NFT Minted");
+                    console.log(event);
+                    // If event has parameters: event.returnValues.valueName
+                });
 
             // });
         });
@@ -159,6 +184,7 @@ App = {
             addressLotteryOperator = await instance.lotteryOperator();
             if(sessionStorage.getItem("lotteryOperator") == null && addressLotteryOperator != "0x0000000000000000000000000000000000000000"){
             sessionStorage.setItem("lotteryOperator",addressLotteryOperator.toLowerCase());
+            window.location.reload();
             }
             sessionStorage.setItem("currentUser", App.account);
             blockNumber = await web3.eth.getBlockNumber();
