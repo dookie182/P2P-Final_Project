@@ -47,5 +47,9 @@ contract LotteryMint is ERC721URIStorage {
         safeTransferFrom(lotteryOperator, player, tokenId);
     }
 
+    function getTokenURI(uint256 tokenID) view public returns (string memory){
+        return tokenURI(tokenID);
+    }
+
 
 }

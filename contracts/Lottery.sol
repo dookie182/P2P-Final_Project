@@ -27,9 +27,9 @@ contract Lottery{
     
     uint8 private previousValue;
     Ticket [] private tickets;
-    uint private lotteryDuration;
-    uint private DEBUG = 0;
-    uint private K = 2;
+    uint public lotteryDuration;
+    uint private DEBUG = 1;
+    uint private K = 11;
 
     // Events 
     event ticketBuy(address player);
@@ -37,9 +37,10 @@ contract Lottery{
     event roundStart();
     event NFTMinted(address NFTOwner, uint256 newNFTId);
     event awardPlayer(address player, uint256 prize);
-    event numbersDrawn();
+    event numbersDrawn(uint256[6] winningNumbers);
     event lotteryClosed();
     event lotteryStart();
+    event test();
    
 
 
@@ -171,6 +172,7 @@ contract Lottery{
             }
             for(uint j = 0; j <= i; j++){
                 if(winningNumbers[i] == winningNumbers[j] && i != 5){
+                    emit test();
                     winningNumbers[i] = rand(69);
                 }
                 if(winningNumbers[i] == winningNumbers[j] && i == 5){
@@ -180,7 +182,7 @@ contract Lottery{
         }
         }
 
-        emit numbersDrawn();
+        emit numbersDrawn(winningNumbers);
     }
 
     //Function used draw numbers and give prizes. Only the lottery operator can call this function.
@@ -224,8 +226,14 @@ contract Lottery{
 
     //Function used to deterministically extract pseudo-random winning numbers for the lottery
     function rand(uint modulus) private returns (uint8) {
-        previousValue = uint8((uint256(keccak256(abi.encodePacked(block.number + K, previousValue))))% modulus);
+        previousValue = uint8((uint256(keccak256(abi.encodePacked(block.number + K + block.timestamp, previousValue))))% modulus);
+        K += 1;
         return previousValue;
+    }
+    
+    //Function used to get URI linked to minted NFT;
+    function getURI(uint256 tokenID) view public returns (string memory){
+        return item.getTokenURI(tokenID);
     }
 }
 

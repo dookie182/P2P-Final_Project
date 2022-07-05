@@ -72,7 +72,7 @@ App = {
                     <span aria-hidden="true">&times;</span>
                   </button>
                   </div>`;
-                  $(".alert").first().hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                  $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
 
                     console.log("Event catched: Round Start");
                     console.log(event);
@@ -107,7 +107,7 @@ App = {
                     <span aria-hidden="true">&times;</span>
                   </button>
                   </div>`;
-                  $(".alert").first().hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                  $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Lottery Closed");
                     console.log(event);
                     // If event has parameters: event.returnValues.valueName
@@ -120,7 +120,7 @@ App = {
                     <span aria-hidden="true">&times;</span>
                   </button>
                   </div>`;
-                  $(".alert").first().hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                  $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Round Closed");
                     console.log(event);
                     // If event has parameters: event.returnValues.valueName
@@ -133,7 +133,7 @@ App = {
                     <span aria-hidden="true">&times;</span>
                   </button>
                   </div>`;
-                  $(".alert").first().hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                  $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Lottery Start");
                     console.log(event);
                     // If event has parameters: event.returnValues.valueName
@@ -182,13 +182,55 @@ App = {
         
         App.contracts["Lottery"].deployed().then(async(instance) =>{
             addressLotteryOperator = await instance.lotteryOperator();
+            const div = document.getElementById("eventId");
             if(sessionStorage.getItem("lotteryOperator") == null && addressLotteryOperator != "0x0000000000000000000000000000000000000000"){
             sessionStorage.setItem("lotteryOperator",addressLotteryOperator.toLowerCase());
             window.location.reload();
             }
             sessionStorage.setItem("currentUser", App.account);
             blockNumber = await web3.eth.getBlockNumber();
-            $("#currentBlock").html("Block Number: "+ blockNumber);
+            closingBlock = await instance.ticketingCloses();
+            duration = await instance.lotteryDuration();
+
+            roundStartBlock = parseInt(closingBlock) - parseInt(duration); 
+
+            $("#currentBlock").html("Current Block :"+ blockNumber);
+            $("#closingBlock").html("Closing Block :"+ closingBlock);
+            $("#roundStartBlock").html("Round Start Block :"+ roundStartBlock);
+
+            instance.getPastEvents('numbersDrawn', {
+                fromBlock: roundStartBlock,
+                toBlock: 'latest'
+            }, function(error, events){ console.log(events); })
+            .then(function(events){
+                if(events.length != 0){
+                console.log(events[0].returnValues.winningNumbers);
+                $("#drawnNumbers").html("Last Drawn Numbers: " + events[0].returnValues.winningNumbers.toString());
+                }
+            });
+            tokenURI = await instance.getURI(0);
+
+            instance.getPastEvents('awardPlayer', {
+                fromBlock: roundStartBlock,
+                toBlock: 'latest'
+            }, function(error, events){ console.log(events); })
+            .then(async(events) =>{
+                if(events.length != 0){
+                    tokenURI = "https://i0.wp.com/www.giacomocusano.com/wp-content/uploads/2016/07/coastal-wash-web.jpg?fit=1024%2C682&ssl=1"
+                    console.log(tokenURI);
+                    console.log(events[0].returnValues.player);
+
+                    events.forEach(element => {
+                    $("#prizes").hide.append("Account " + events[0].returnValues.player + " has won NFT #: " + events[0].returnValues.prize + `<img src="` + tokenURI + `" alt="..." class="img-thumbnail">`);
+
+                    });
+                    //tokenURI = await instance.getURI(events[0].returnValues.prize);
+        
+
+                }
+            });
+
+
             //const v = await instance.value(); // Solidity uint are Js BN (BigNumbers) 
             //console.log(v.toNumber());
             //$("#valueId").html("" + v);
@@ -225,7 +267,6 @@ App = {
                 <p class="mb-0">Please choose six different numbers! You cannot insert letters in the box!</p>
               </div>
               `;
-              $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                 }
             }
         });
@@ -246,20 +287,21 @@ App = {
     startLottery: function() {
 
         App.contracts["Lottery"].deployed().then(async(instance) =>{
-            await instance.startLottery(10,{from:App.account});
+            await instance.startLottery(5,{from:App.account});
         });
     }, 
     closeLottery: function() {
    
         App.contracts["Lottery"].deployed().then(async(instance) =>{
             await instance.closeLottery({from:App.account});
+            localStorage.setItem("closed", true);
         });
     },
     closeRound: function() {
         const div = document.getElementById("eventId");
 
         App.contracts["Lottery"].deployed().then(async(instance) =>{
-            roundClose = await instance.ticketingCloses;
+            roundClose = await instance.ticketingCloses();
             blockNumber = await web3.eth.getBlockNumber();
 
             console.log(blockNumber);
@@ -303,7 +345,7 @@ App = {
         const div = document.getElementById("eventId");
 
         App.contracts["Lottery"].deployed().then(async(instance) =>{
-            roundClose = await instance.ticketingCloses;
+            roundClose = await instance.ticketingCloses();
             blockNumber = await web3.eth.getBlockNumber();
             if(blockNumber >= roundClose){
                 try{

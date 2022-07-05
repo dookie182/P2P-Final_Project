@@ -19,7 +19,12 @@
     <div class="container " style="background-color:#f5f5f5" >
         <div class="row" style="background-color: #f5f5f5;">
             <div class="col-lg-2">
-                <h4 id="currentBlock">Block Number:</h4>
+                <br>
+                <br>
+                <h6 id="currentBlock">Current Block:</h6>
+                <h6 id="closingBlock">Closing Block:</h6>
+                <h6 id="roundStartBlock">Starting Block:</h6>
+
             </div>     
             <div id="mainUI" class="col-lg-9">
                 <h1 class="text-center">User Interface</h1>
@@ -36,9 +41,20 @@
                         <input name="numbers" type="text" class="form-control" aria-label="InputNumberFive" aria-describedby="inputGroup-sizing-default" placeholder="Number 5" value="">
                         
                         <input id="powerball" name="numbers" type="text" class="form-control" aria-label="InputNumberSix" aria-describedby="inputGroup-sizing-default" placeholder="PowerBall" value="">
+                        <small id="passwordHelpBlock" class="form-text text-muted">
+                            Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+                        </small>
                     </div>
                     <button class="btn btn-primary" onclick="App.buyTicket()">Buy Ticket</button>
+                    <div id="drawnNumbers"></div>
                     </div>
+                    <div class="card text-center">
+                        <div class="card-body">
+                          <h5 class="card-title">NFT</h5>
+                          <p class="card-text">List of won NFTs</p>
+                          
+                        <div id="prizes"></div>
+                        </div>
                 </div>
                 <br>
                 <br>
