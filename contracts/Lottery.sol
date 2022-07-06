@@ -24,6 +24,8 @@ contract Lottery{
     
     //Array for sorted winning numbers
     uint256 [6] private winningNumbers; 
+
+    mapping (address => uint256[]) public wonNFTs ;
     
     uint8 private previousValue;
     Ticket [] private tickets;
@@ -40,7 +42,6 @@ contract Lottery{
     event numbersDrawn(uint256[6] winningNumbers);
     event lotteryClosed();
     event lotteryStart();
-    event test();
    
 
 
@@ -98,6 +99,7 @@ contract Lottery{
             if(class > 0){
                 item.sendNFT(player.playerAddress, NFTList[class - 1]);
                 emit awardPlayer(player.playerAddress, NFTList[class - 1]);
+                wonNFTs[player.playerAddress].push(NFTList[class - 1]); 
                 mint(class);
             }
             powerBall = false;
@@ -172,7 +174,6 @@ contract Lottery{
             }
             for(uint j = 0; j <= i; j++){
                 if(winningNumbers[i] == winningNumbers[j] && i != 5){
-                    emit test();
                     winningNumbers[i] = rand(69);
                 }
                 if(winningNumbers[i] == winningNumbers[j] && i == 5){
@@ -234,6 +235,10 @@ contract Lottery{
     //Function used to get URI linked to minted NFT;
     function getURI(uint256 tokenID) view public returns (string memory){
         return item.getTokenURI(tokenID);
+    }
+
+    function getNFTList(address player) view public returns (uint256[] memory){
+        return wonNFTs[player];
     }
 }
 

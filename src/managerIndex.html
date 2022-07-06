@@ -19,13 +19,15 @@
     <div class="container" style="background-color:#f5f5f5" >
         <div class="row" style="background-color: #f5f5f5">
             <div class="col-lg-2">
-                <h1 class="text-center">Operations</h1>
+                <br>
+                <br>
+                <h3 class="text-center">Operations</h3>
                 
                 <div class="btn-group-vertical">
                     <button class="btn btn-primary" onclick="App.startLottery()">Start Lottery</button>
-                    <button class="btn btn-primary" onclick="App.startRound()">Start Round</button>
-                    <button class="btn btn-primary" onclick="App.closeRound()">Close Round</button>
-                    <button class="btn btn-primary" onclick="App.closeLottery()">Close Lottery</button>
+                    <button class="btn btn-success" onclick="App.startRound()">Start Round</button>
+                    <button class="btn btn-warning" onclick="App.closeRound()">Close Round</button>
+                    <button class="btn btn-danger" onclick="App.closeLottery()">Close Lottery</button>
                     <br>
                     <br>
                     <h6 id="currentBlock">Current Block:</h6>
@@ -35,7 +37,7 @@
    
             </div>        
             <div id="mainUI" class="col-lg-9">
-                <h1 class="text-center">Manager Interface</h1>
+                <h1 class="text-center">Welcome back, Lottery Manager!</h1>
                 <div class="card text-center">
                     <div class="card-body">
                       <h5 class="card-title">Choose your Numbers!</h5>
@@ -57,10 +59,14 @@
                           </small>
                     </div>
                     <button class="btn btn-primary" onclick="App.buyTicket()">Buy Ticket</button>
+                    <br>
+                    <br>
                     <p id="drawnNumbers"> </p>
                     </div>
                 </div>
                 <br>
+                <div id="eventId"></div>
+
                 <div class="card text-center">
                     <div class="card-body">
                       <h5 class="card-title">NFTs</h5>
@@ -72,7 +78,6 @@
                 <br>
                 <br>
             
-                <div id="eventId"></div>
                   </div>
             </div>
         </div>
@@ -89,7 +94,6 @@
     <script src="./dist/truffle-contract.js"></script>
     <!-- App -->
     <script src="./js/app.js"></script>
-    <script src="./js/routing.js"></script>
 
     
 </body>

@@ -36,10 +36,3 @@ $(function() {
     });
 });
 
-/*
-$(function(){
-    $(window).on('beforeunload', function(){
-        sessionStorage.clear;
-    })
-})
-*/
