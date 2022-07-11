@@ -227,25 +227,20 @@ App = {
 
             if(window.location.href == "http://localhost:3000/nftList.html"){
 
-                    nftList = await instance.getNFTList(App.account.toLowerCase(),{from:App.account});        
-                    console.log(nftList);
+                    nftList = await instance.getNFTList(App.account,{from:App.account});        
                     if(nftList.length != 0){
-                    const div = document.getElementById("#allPrizes");
-                    for(i = 0; i < nftList.length; i++){
-                        tokenURI = await instance.getURI(nftList[i].words[0]);
-                        
-                        $("#allPrizes").append(`<figure class="figure">
-                            <img src="`+ tokenURI + `" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
-                        <figcaption class="figure-caption">Account:` + App.account + ` has won NFT #:` + nftList[i].words[0] + `  </figcaption>
-                        </figure>
-                        <hr style="height:2px;border-width:0;color:gray;background-color:gray;width:95%">`);
-        
-                    }
-                }
-                else{}
+                        for(j = 0; j < nftList.length; j++){
+                            tokenURI = await instance.getURI(nftList[j].words[0]);
+                            
+                            $("#allPrizes").append(`<figure class="figure">
+                                <img src="`+ tokenURI + `" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                            <figcaption class="figure-caption">Account:` + App.account + ` has won NFT #:` + nftList[j].words[0] + `  </figcaption>
+                            </figure>
+                            <hr style="height:2px;border-width:0;color:gray;background-color:gray;width:95%">`);
+            
+                            }
+                        }
             }
-
-
             //const v = await instance.value(); // Solidity uint are Js BN (BigNumbers) 
             //console.log(v.toNumber());
             //$("#valueId").html("" + v);
