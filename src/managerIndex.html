@@ -50,13 +50,13 @@
                         <input name="numbers" type="text" class="form-control" aria-label="InputNumberFive" aria-describedby="inputGroup-sizing-default" placeholder="Number 5">
                         
                         <input id="powerball" name="numbers" type="text" class="form-control" aria-label="InputNumberSix" aria-describedby="inputGroup-sizing-default" placeholder="PowerBall">
-                        <small id="passwordHelpBlock" class="form-text text-muted">
+                        <p id="passwordHelpBlock" class="form-text text-muted">
                             Please choose 6 different numbers and buy a ticket to start to play! 
                             <br>
                             You can choose first five numbers between 0 - 69 and the sixth number, the Powerball, can be chosen between 0 - 29. 
                             <br>
                             Notice that words and symbols are not accepted.
-                          </small>
+                        </p>
                     </div>
                     <button class="btn btn-primary" onclick="App.buyTicket()">Buy Ticket</button>
                     <br>
@@ -66,19 +66,18 @@
                 </div>
                 <br>
                 <div id="eventId"></div>
-
                 <div class="card text-center">
                     <div class="card-body">
                       <h5 class="card-title">NFTs</h5>
-                      <p class="card-text">List of last won NFTs</p>                      
+                      <p class="card-text">List of last won NFTs</p>        
+                      <button class="btn btn-primary" onclick="App.showPrizes()">Won NFTs</button>
+                      <br>               
                     <div id="prizes"></div>
                 </div>
-            </div>
-
+                </div>
                 <br>
                 <br>
-            
-                  </div>
+                </div>
             </div>
         </div>
     </div>

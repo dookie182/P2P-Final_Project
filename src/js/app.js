@@ -16,8 +16,6 @@ App = {
         // console.log(web3);
         
         if(typeof web3 != 'undefined') {
-//            App.web3Provider = web3.currentProvider;
-//            web3 = new Web3(web3.currentProvider);
             App.web3Provider = window.ethereum; // !! new standard for modern eth browsers (2/11/18)
             web3 = new Web3(App.web3Provider);
             try {
@@ -62,8 +60,7 @@ App = {
         App.contracts["Lottery"].deployed().then(async (instance) => {
             const div = document.getElementById("eventId");
 
-            // web3.eth.getBlockNumber(function (error, block) {
-                // click is the Solidity event
+            //  Event Listener for RoundStart event;
                 instance.roundStart().on('data', function (event) {
                     //$("#eventId").html("Event catched: Round Start");
                     div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -76,8 +73,9 @@ App = {
 
                     console.log("Event catched: Round Start");
                     console.log(event);
-                    // If event has parameters: event.returnValues.valueName
                 });
+
+                //  Event Listener for TicketBuy event;
                 instance.ticketBuy().on('data', function (event) {
                     div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
                     Ticket Buy Event
@@ -88,10 +86,10 @@ App = {
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Ticket Buy");
                     console.log(event);
-                    // If event has parameters: event.returnValues.valueName
                 });
+
+                //  Event Listener for LotteryClosed event;
                 instance.lotteryClosed().on('data', function (event) {
-                    //$("#eventId").html("Event catched: Lottery Closed");
                     div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
                     Lottery Closed!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -101,8 +99,9 @@ App = {
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Lottery Closed");
                     console.log(event);
-                    // If event has parameters: event.returnValues.valueName
                 });
+
+                //  Event Listener for RoundClosed event;
                 instance.roundClosed().on('data', function (event) {
                     //$("#eventId").html("Event catched: Round Closed");
                     div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -114,8 +113,9 @@ App = {
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Round Closed");
                     console.log(event);
-                    // If event has parameters: event.returnValues.valueName
                 });
+
+                //  Event Listener for LotteryStart event;
                 instance.lotteryStart().on('data', function (event) {
                     //$("#eventId").html("Event catched: Lottery Start");
                     div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -127,8 +127,9 @@ App = {
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Lottery Start");
                     console.log(event);
-                    // If event has parameters: event.returnValues.valueName
                 });
+
+                //  Event Listener for NFTMinted event;
                 instance.NFTMinted().on('data', function (event) {
                     //$("#eventId").html("");
                     div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -140,16 +141,10 @@ App = {
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: New NFT Minted");
                     console.log(event);
-                    // If event has parameters: event.returnValues.valueName
                 });
+
+                //  Event Listener for awardPlayer event;
                 instance.awardPlayer().on('data', function (event) {
-                    //$("#eventId").html("");
-                    setTimeout(function(){div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Player Awarded!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  </div>`; }, 5000);
                   /*  div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
                     NFT Minted
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -159,16 +154,12 @@ App = {
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: New NFT Minted");
                     console.log(event);
-                    // If event has parameters: event.returnValues.valueName
                 });
-
-            // });
         });
 
         return App.render();
     },
 
-    // Get a value from the smart contract
     render: function() {
         
         App.contracts["Lottery"].deployed().then(async(instance) =>{
@@ -206,7 +197,6 @@ App = {
                 toBlock: 'latest'
             }, function(error, events){ console.log(events); })
             .then(async(events) =>{
-                //console.log(events[0].returnValues.player.toLowerCase());
 
                 if(events.length != 0 && sessionStorage.getItem("currentUser") == events[0].returnValues.player.toLowerCase()){
 
@@ -241,9 +231,6 @@ App = {
                             }
                         }
             }
-            //const v = await instance.value(); // Solidity uint are Js BN (BigNumbers) 
-            //console.log(v.toNumber());
-            //$("#valueId").html("" + v);
         });
     },
 
@@ -455,7 +442,7 @@ routing = {
     }
 }
 
-// Call init whenever the window loads
+// Call App.init and routing.redirect() whenever the window loads;
 $(function() {
     $(window).on('load', function () {
         App.init();

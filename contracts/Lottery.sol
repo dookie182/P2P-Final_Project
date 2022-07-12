@@ -237,6 +237,7 @@ contract Lottery{
         return item.getTokenURI(tokenID);
     }
 
+    //Function used to get all NFTs won by a specif player;
     function getNFTList(address player) view public returns (uint256[] memory){
         return wonNFTs[player];
     }
