@@ -50,6 +50,7 @@ contract Lottery{
 
     //Function to create a new Lottery
     function startLottery (uint duration) public {
+        require(lotteryOperator == address(0),"Already existing lottery!");
         lotteryOperator = payable(msg.sender);
         item = new LotteryMint();
         ticketingCloses = block.number + duration;

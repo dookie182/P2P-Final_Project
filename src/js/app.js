@@ -13,10 +13,9 @@ App = {
     /* initialize Web3 */
     initWeb3: function() {
         console.log("Entered")
-        // console.log(web3);
         
         if(typeof web3 != 'undefined') {
-            App.web3Provider = window.ethereum; // !! new standard for modern eth browsers (2/11/18)
+            App.web3Provider = window.ethereum; 
             web3 = new Web3(App.web3Provider);
             try {
                     ethereum.enable().then(async() => {                     
@@ -27,7 +26,7 @@ App = {
                 console.log(error);
             }
         } else {
-            App.web3Provider = new Web3.providers.HttpProvider(App.url); // <==
+            App.web3Provider = new Web3.providers.HttpProvider(App.url);
             web3 = new Web3(App.web3Provider);
         }
 
@@ -117,13 +116,12 @@ App = {
 
                 //  Event Listener for LotteryStart event;
                 instance.lotteryStart().on('data', function (event) {
-                    //$("#eventId").html("Event catched: Lottery Start");
-                    div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    $("#eventId").html(`<div class="alert alert-success alert-dismissible fade show" role="alert">
                     Lottery Started!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
-                  </div>`;
+                  </div>`);
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
                     console.log("Event catched: Lottery Start");
                     console.log(event);
@@ -145,14 +143,14 @@ App = {
 
                 //  Event Listener for awardPlayer event;
                 instance.awardPlayer().on('data', function (event) {
-                  /*  div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    NFT Minted
+                  div.innerHTML += `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Player Awarded!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
-                  </div>`;*/
+                  </div>`;
                   $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
-                    console.log("Event catched: New NFT Minted");
+                    console.log("Event catched: Player Awarded!");
                     console.log(event);
                 });
         });
@@ -199,7 +197,6 @@ App = {
             .then(async(events) =>{
 
                 if(events.length != 0 && sessionStorage.getItem("currentUser") == events[0].returnValues.player.toLowerCase()){
-
                     console.log(tokenURI);
                     for(i = 0; i < events.length; i++){
                         tokenURI = await instance.getURI(events[i].returnValues.prize);
@@ -208,9 +205,6 @@ App = {
                         <figcaption class="figure-caption">Account:` + events[i].returnValues.player + ` has won NFT #:` + events[i].returnValues.prize + `  </figcaption>
                       </figure>
                       <hr style="height:2px;border-width:0;color:gray;background-color:gray;width:95%">`);
-
-                        
-                        //$("#prizes").append("Account " + events[i].returnValues.player + " has won NFT #: " + events[i].returnValues.prize + `<img src="` + tokenURI + `" alt="..." class="img-thumbnail">`);
                     }
                 }
             });
@@ -243,7 +237,7 @@ App = {
         for(i = 0; i < 6; i++){
             if(textInput[i].value != ""){
             numbers[i] =  textInput[i].value;
-            //textInput[i].value = "";
+            textInput[i].value = "";
             }
             console.log(numbers[i]);
         }
@@ -300,9 +294,10 @@ App = {
     }
     }, 
     startLottery: function() {
-
+        const lotteryDuration = document.getElementsByName("lotteryDuration");
+        console.log(lotteryDuration[0].value);
         App.contracts["Lottery"].deployed().then(async(instance) =>{
-            await instance.startLottery(5,{from:App.account});
+            await instance.startLottery(lotteryDuration[0].value,{from:App.account});
         });
     }, 
     closeLottery: function() {
