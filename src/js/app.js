@@ -184,7 +184,6 @@ App = {
             }, function(error, events){ console.log(events); })
             .then(function(events){
                 if(events.length != 0){
-                console.log(events[0].returnValues.winningNumbers);
                 $("#drawnNumbers").html("Last Drawn Numbers: " + events[0].returnValues.winningNumbers.toString());
                 }
             });
@@ -197,7 +196,6 @@ App = {
             .then(async(events) =>{
 
                 if(events.length != 0 && sessionStorage.getItem("currentUser") == events[0].returnValues.player.toLowerCase()){
-                    console.log(tokenURI);
                     for(i = 0; i < events.length; i++){
                         tokenURI = await instance.getURI(events[i].returnValues.prize);
                         $("#prizes").append(`<figure class="figure">
@@ -295,9 +293,42 @@ App = {
     }, 
     startLottery: function() {
         const lotteryDuration = document.getElementsByName("lotteryDuration");
-        console.log(lotteryDuration[0].value);
+        const div = document.getElementById("eventId");
         App.contracts["Lottery"].deployed().then(async(instance) =>{
-            await instance.startLottery(lotteryDuration[0].value,{from:App.account});
+            try {
+                await instance.startLottery(lotteryDuration[0].value,{from:App.account});
+
+            } catch (e) {
+                if(e.reason == "invalid BigNumber string"){
+                    div.innerHTML += `<div class="alert alert-danger" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>        
+                    <h4 class="alert-heading">Oops..</h4>
+                    <p>Check lottery duration!</p>
+                    <hr>
+                    <p class="mb-0">Please insert the duration of a single lottery round.</p>
+                  </div>
+                  `;
+                  $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+    
+                    }
+                else{
+                        div.innerHTML += `<div class="alert alert-danger" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>        
+                        <h4 class="alert-heading">Oops..</h4>
+                        <p>Lottery already existing!</p>
+                        <hr>
+                        <p class="mb-0">Please close the current lottery to open a new one.</p>
+                        </div>
+                        `;
+                        $(".alert").hide().fadeIn(200).delay(1500).fadeOut(1000, function () { $(this).remove(); });
+                
+            }
+                
+            }
         });
     }, 
     closeLottery: function() {
@@ -313,9 +344,6 @@ App = {
         App.contracts["Lottery"].deployed().then(async(instance) =>{
             roundClose = await instance.ticketingCloses();
             blockNumber = await web3.eth.getBlockNumber();
-
-            console.log(blockNumber);
-            console.log(roundClose);
 
             if(blockNumber == roundClose){
             try{
@@ -362,8 +390,10 @@ App = {
                     await instance.startNewRound({from:App.account});
                 }catch(e){
                     console.log(e.reason);
+                    
                 }
                 }else{
+                    
                     div.innerHTML += `<div class="alert alert-danger" role="alert">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
                     <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
@@ -385,7 +415,6 @@ App = {
             nftList = await instance.getNFTList(App.account.toLowerCase(),{from:App.account});
             window.location.replace("http://localhost:3000/nftList.html");
 
-            console.log(nftList);
             if(nftList.length != 0){
             const div = document.getElementById("#allPrizes");
             for(i = 0; i < nftList.length; i++){
@@ -398,9 +427,7 @@ App = {
                 <hr style="height:2px;border-width:0;color:gray;background-color:gray;width:95%">`);
 
             }
-        }
-        else{}
-        
+        }        
         });
 
 
@@ -410,15 +437,11 @@ App = {
 routing = {
 
     getUserIndex: function(){
-        if(sessionStorage.getItem("currentUser") != sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/userIndex.html"){
             window.location.replace("http://localhost:3000/userIndex.html");
-        }
     },
 
     getManagerIndex: function(){
-        if(sessionStorage.getItem("currentUser") == sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/managerIndex.html" || sessionStorage.getItem("currentUser") == null && window.location.href != "http://localhost:3000/managerIndex.html"){
             window.location.replace("http://localhost:3000/managerIndex.html");
-        }
     },
 
     redirect: function(){
@@ -427,8 +450,7 @@ routing = {
             window.location.replace("http://localhost:3000/lotteryClosed.html");
         }
 
-
-        if(sessionStorage.getItem("currentUser") == sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/managerIndex.html" || sessionStorage.getItem("currentUser") == null && window.location.href != "http://localhost:3000/managerIndex.html"){
+        if(sessionStorage.getItem("currentUser") == sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/managerIndex.html" && window.location.href != "http://localhost:3000/nftList.html"){
             window.location.replace("http://localhost:3000/managerIndex.html");
         }
         if(sessionStorage.getItem("currentUser") != sessionStorage.getItem("lotteryOperator") && window.location.href != "http://localhost:3000/userIndex.html" && window.location.href != "http://localhost:3000/nftList.html" ){
